@@ -43,8 +43,9 @@ public class BoardController {
 	
 	//TODO 자유게시판 리스트
 	@RequestMapping(value="/board_list", method=RequestMethod.GET)
-	public String board_list(Model model) {
+	public String board_list(Model model, HttpSession session) {
 		
+		session.getAttribute("USER");
 		List<BoardVO> boardList = boardService.selectAll();
 		
 		model.addAttribute("board", boardList);
@@ -88,11 +89,67 @@ public class BoardController {
 	
 	//TODO 자유게시판 상세페이지
 	@RequestMapping(value="{b_num}/board_detail", method=RequestMethod.GET)
-	public String board_detail(@PathVariable("b_num") String b_num, Model model) {
+	public String board_detail(@PathVariable("b_num") int b_num, Model model, HttpSession session) {
 		
+		UserVO userVO = (UserVO)session.getAttribute("USER");
 		BoardVO boardVO = boardService.findByNumber(b_num);
 		model.addAttribute("BOARD", boardVO);
+	// model.addAttribute("USERNAME", userVO.getUsername());
+		
+		try {
+			if(boardVO.getB_writer().equals(userVO.getUsername())) {
+				model.addAttribute("USER1","OK");
+			} else {
+			}
+			log.debug( userVO.getUsername());
+			log.debug( boardVO.getB_writer());
+		} catch (Exception e) {
+		}
+		
 		return "board/board_detail";
+		
 	}
 
+	//TODO 자유게시판 수정..
+	@RequestMapping(value="{b_num}/board_update", method=RequestMethod.GET)
+	public String board_update(@PathVariable("b_num") int b_num, Model model, HttpSession session) {
+		
+		UserVO loginUser = (UserVO)session.getAttribute("USER");
+		BoardVO boardVO = boardService.findByNumber(b_num);
+		
+		model.addAttribute("board", boardVO);
+		
+		return "/board/board_write";
+	}	
+	
+	@RequestMapping(value="{b_num}/board_update", method=RequestMethod.POST)
+	public String board_update(BoardVO boardVO, Model model, HttpSession session) {
+		
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+		
+		
+		UserVO loginUser = (UserVO)session.getAttribute("USER");
+		
+		
+		BoardVO boardVO1 = BoardVO.builder()
+				.b_date(dayFormat.format(date))
+				.b_time(timeFormat.format(date))
+				.b_writer(loginUser.getUsername())
+				.b_content(boardVO.getB_content())
+				.b_title(boardVO.getB_title())
+				.build();
+		boardService.update(boardVO1);
+		
+		
+		
+		model.addAttribute("board", boardVO);
+		
+		String retStr = String.format("redirect:/board/%s/detail", );
+		return retStr;
+		
+	}	
+	
+	
 }

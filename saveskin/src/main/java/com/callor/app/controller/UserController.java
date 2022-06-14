@@ -44,7 +44,8 @@ public class UserController {
 		}
 		
 		
-		return "user/user_login";
+	//	return "user/user_login";
+		return "home";
 	}
 	
 	

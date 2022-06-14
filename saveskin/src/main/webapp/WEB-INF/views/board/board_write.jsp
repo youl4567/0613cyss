@@ -13,9 +13,8 @@
 	<section>
 		<form method="POST" class="">
 			<div id="title">
-				<c:if test="${not empty board.b_num }">
-			
-		</c:if>
+					
+					
 				<input name="b_title" type="text" placeholder="제목을 입력해주세요"	value="${board.b_title}" />
 				<input name="b_writer"  value="${board.b_writer}" readonly="readonly" />
 				<input name="b_date" type="date" value="${board.b_date}" hidden="hidden">
