@@ -6,11 +6,11 @@
 <head>
 <%@ include file="/WEB-INF/views/include/include_head.jsp"%>
 <link rel="stylesheet"
-	href="${rootPath}/static/css/board_detail.css?ver=2022-05-28-001">
+	href="${rootPath}/static/css/board_detail.css?ver=2022-06-15-001">
 <script>
 	const rootPath = "${rootPath}"
 </script>
-<script src="${rootPath}/static/js/board_update.js?ver=2022-06-14-001"></script>	
+<script src="${rootPath}/static/js/board_update.js?ver=2022-06-14-002"></script>	
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 		<!-- 내용 content -->
 		<div id="content">
-			<p>${BOARD.b_content}</p>
+			<textarea>${BOARD.b_content}</textarea>
 		</div>
 			<c:if test="${USER1 eq 'OK'}">
 				<div class="btn-box">
@@ -41,7 +41,7 @@
 					<a href="${rootPath}/board/${BOARD.b_num}/board_update" class="update">수정</a>
 					</div>
 					<!-- href="javascript:void(0) : a tag의 link 연결기능을 완전히 무력화 -->
-					<a href="javascript:void(0)" class="delete">삭제</a>
+					<a href="${rootPath}/board/${BOARD.b_num}/board_delete" class="delete">삭제</a>
 				</div>
 			</c:if>
 

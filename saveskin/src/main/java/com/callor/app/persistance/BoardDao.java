@@ -11,6 +11,7 @@ public interface BoardDao extends GenericDao<BoardVO, String> {
 	public List<BoardVO> findByTitle(String title);
 	public List<BoardVO> findByContent(String content);
 	
+	public int deleteByNum(String id);
 	
 	
 }

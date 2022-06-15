@@ -107,7 +107,6 @@ public class BoardController {
 		}
 		
 		return "board/board_detail";
-		
 	}
 
 	//TODO 자유게시판 수정..
@@ -131,25 +130,43 @@ public class BoardController {
 		
 		
 		UserVO loginUser = (UserVO)session.getAttribute("USER");
+
+		if(loginUser == null) {
+			return "redirect:/user/user_login";
+		}
 		
+//		BoardVO boardVO1 = BoardVO.builder()
+//				.b_date(dayFormat.format(date))
+//				.b_time(timeFormat.format(date))
+//				.b_writer(loginUser.getUsername())
+//				.b_title(boardVO.getB_title())
+//				.build();
 		
-		BoardVO boardVO1 = BoardVO.builder()
-				.b_date(dayFormat.format(date))
-				.b_time(timeFormat.format(date))
-				.b_writer(loginUser.getUsername())
-				.b_content(boardVO.getB_content())
-				.b_title(boardVO.getB_title())
-				.build();
-		boardService.update(boardVO1);
+		log.debug("=".repeat(100));
+		log.debug(boardVO.getB_title());
 		
+		boardVO.setB_date(dayFormat.format(date));
+		boardVO.setB_time(timeFormat.format(date));
+		boardService.update(boardVO);
 		
+		// boardService.insert(boardVO);
 		
-		model.addAttribute("board", boardVO);
+		 model.addAttribute("board", boardVO);
 		
-		String retStr = String.format("redirect:/board/%s/detail", );
+		String retStr = String.format("redirect:/board/%s/board_detail", boardVO.getB_num());
 		return retStr;
 		
 	}	
 	
+	// 자유게시판 글 삭제
+	@RequestMapping(value="/{b_num}/board_delete", method=RequestMethod.GET)
+	public String delete(@PathVariable("b_num") String b_num) {
+		
+		int ret = boardService.deleteByNum(b_num);
+		// 삭제한 데이터 개수를 return 한다
+		// int ret = BoardService.delete(b_num);
+		
+		return "redirect:/board/board_list";
+	}
 	
 }
